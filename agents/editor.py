@@ -1,18 +1,24 @@
 from langchain_core.messages import HumanMessage
 from core.llms import get_llm
-from core.state import AgentState
+from core.state import AgentState, EditResponse
 
 def editor_node(state: AgentState):
     llm = get_llm(state["intelligence_rating"])
     input_text = state["messages"][-1].content
     
-    prompt = """You are an expert editor. 
-Fix the grammar, spelling, and enhance the tone of the provided text.
-Ensure it sounds professional yet engaging. Do not change the core meaning.
+    prompt = f"""You are an elite linguistic editor. 
+Provide a 'no-bullshit' grammatically perfect version of the text and a separate explanation of your improvements.
 
 Text:
-{text}
+{input_text}
 """
+    structured_llm = llm.with_structured_output(EditResponse)
+    response = structured_llm.invoke([HumanMessage(content=prompt)])
     
-    response = llm.invoke([HumanMessage(content=prompt.format(text=input_text))])
-    return {"messages": [response], "output": response.content}
+    return {
+        "messages": [HumanMessage(content=response.refined_text)], 
+        "output": response.refined_text,
+        "metadata": {
+            "explanation": response.explanation
+        }
+    }

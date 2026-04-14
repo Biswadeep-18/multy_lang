@@ -1,11 +1,12 @@
 import streamlit as st
 from langchain_core.messages import HumanMessage
 from core.graph import graph
-from core.config import init_app
+from core.config import init_app, get_flattened_languages
 
 # Initialize App
 init_app("Multi-Lang AI Assistant", "🌐")
 
+all_languages = get_flattened_languages()
 
 # Sidebar
 with st.sidebar:
@@ -39,7 +40,7 @@ def run_assistant(input_text, task, target_lang=None, task_subtype=None):
     
     with st.spinner(f"Agent is working on {task}..."):
         result = graph.invoke(initial_state)
-        return result["output"]
+        return result
 
 # Tab 1: Translation
 with tab1:
@@ -48,16 +49,20 @@ with tab1:
     with col1:
         st.markdown("### 📥 Input")
         source_text = st.text_area("Source Text", placeholder="Enter text to translate...", height=250, key="trans_src")
-        target_lang = st.text_input("Target Language", value="English", placeholder="e.g. Amharic, Arabic, French...")
+        target_lang = st.selectbox(
+            "Target Language", 
+            options=all_languages,
+            index=all_languages.index("English") if "English" in all_languages else 0
+        )
         
     with col2:
         st.markdown("### 📤 Output")
         if st.button("🚀 Run Translation", key="btn_trans"):
             if source_text:
-                output = run_assistant(source_text, "translate", target_lang=target_lang)
-                st.success(output)
+                result = run_assistant(source_text, "translate", target_lang=target_lang)
+                st.success(result["output"])
             else:
-                st.warning("Please enter some text.")
+                st.warning("Please provide text to translate.")
 
 # Tab 2: Grammar & Tone
 with tab2:
@@ -68,12 +73,21 @@ with tab2:
     
     with col_g2:
         st.markdown("### ✨ Results")
-        if st.button("⚡ Improve Text", key="btn_edit"):
+        if st.button("✨ Improve Text", key="btn_edit"):
             if edit_text:
-                output = run_assistant(edit_text, "grammar")
-                st.info(output)
+                result = run_assistant(edit_text, "grammar")
+                
+                output = result["output"]
+                metadata = result.get("metadata", {})
+                
+                st.markdown("#### ✅ Corrected Text")
+                st.success(output)
+                
+                if metadata and "explanation" in metadata:
+                    st.markdown("#### 💡 Explanation")
+                    st.info(metadata["explanation"])
             else:
-                st.warning("Please enter some text.")
+                st.warning("Please provide text to refine.")
 
 # Tab 3: Drafting
 with tab3:
@@ -88,8 +102,8 @@ with tab3:
         st.markdown("### 📄 Draft")
         if st.button("✍️ Generate", key="btn_draft"):
             if instructions:
-                output = run_assistant(instructions, "draft", task_subtype=draft_type.lower())
-                st.markdown(output)
+                result = run_assistant(instructions, "draft", task_subtype=draft_type.lower())
+                st.markdown(result["output"])
             else:
                 st.warning("Please provide instructions.")
 
