@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --primary: #1d4ed8; /* Stronger Blue */
+    --accent: #2563eb;
+    --bg-pure: #ffffff;
+    --text-dark: #0f172a; /* Near Black-Blue for maximum readability */
+    --text-blue: #1d4ed8; /* Strong Blue for headers/highlights */
+}
+
+/* Base Body Styling */
+.stApp {
+    background-color: var(--bg-pure) !important;
+    color: var(--text-dark) !important;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Move everything up */
+.block-container {
+    padding-top: 2rem !important;
+    padding-bottom: 0rem !important;
+}
+
+/* Ensure ALL text is visible */
+p, span, label, li, .stMarkdown {
+    color: var(--text-dark) !important;
+}
+
+/* Sidebar Text */
+section[data-testid="stSidebar"] {
+    background-color: #f8fafc !important;
+    border-right: 1px solid #e2e8f0;
+}
+
+section[data-testid="stSidebar"] * {
+    color: var(--text-dark) !important;
+}
+
+/* Headers - Making them a strong Blue */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-blue) !important;
+    font-weight: 700 !important;
+}
+
+/* Input Fields - Dark text and clear borders */
+.stTextInput>div>div>input, .stTextArea>div>div>textarea {
+    background-color: #ffffff !important;
+    border: 1px solid #94a3b8 !important;
+    color: var(--text-dark) !important;
+    border-radius: 8px !important;
+}
+
+/* Button Styling */
+.stButton>button {
+    background-color: var(--primary);
+    color: #ffffff !important; /* Keep button text white for contrast */
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.stButton>button:hover {
+    background-color: #1e40af;
+    transform: translateY(-1px);
+}
+
+/* Tab Styling - High Contrast */
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #f1f5f9;
+}
+
+.stTabs [data-baseweb="tab"] p {
+    color: var(--text-dark) !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: var(--primary) !important;
+    border-radius: 8px !important;
+}
+
+.stTabs [aria-selected="true"] p {
+    color: #ffffff !important; /* White text on selected blue tab */
+}
