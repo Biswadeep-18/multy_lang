@@ -1,4 +1,4 @@
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import HumanMessage
 from core.llms import get_llm
 from core.state import AgentState
 
@@ -14,5 +14,5 @@ Text:
 {text}
 """
     
-    response = llm.invoke([SystemMessage(content=prompt.format(text=input_text))])
+    response = llm.invoke([HumanMessage(content=prompt.format(text=input_text))])
     return {"messages": [response], "output": response.content}

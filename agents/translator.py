@@ -19,5 +19,5 @@ Text to translate:
 {input_text}
 """
     
-    response = llm.invoke([SystemMessage(content=prompt)])
+    response = llm.invoke([HumanMessage(content=prompt)])
     return {"messages": [response], "output": response.content}

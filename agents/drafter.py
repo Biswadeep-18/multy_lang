@@ -1,4 +1,4 @@
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import HumanMessage
 from core.llms import get_llm
 from core.state import AgentState
 
@@ -19,5 +19,5 @@ Requirement:
 - If research: Objective and well-sourced style.
 """
     
-    response = llm.invoke([SystemMessage(content=prompt)])
+    response = llm.invoke([HumanMessage(content=prompt)])
     return {"messages": [response], "output": response.content}
