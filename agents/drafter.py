@@ -7,16 +7,20 @@ def drafter_node(state: AgentState):
     input_text = state["messages"][-1].content
     task_type = state.get("task_subtype", "document")
     
-    prompt = f"""You are a professional writer specializing in {task_type}s.
-Draft a high-quality {task_type} based on the following instructions or notes:
+    prompt = f"""You are a professional world-class writer specializing in {task_type}s.
+Your goal is to draft high-quality content based precisely on the instructions or notes provided.
 
-Input:
+Instructions:
+1. Ensure the content is research-backed, objective, or creative as per the {task_type} context.
+2. Email requirement: Provide a professional and clear subject line.
+3. Document requirement: Structured with clear headings and logical flow.
+4. Research requirement: Objective, well-sourced, and technical style.
+5. You MUST provide your response using the 'DraftResponse' tool.
+
+Input Notes/Instructions:
+\"\"\"
 {input_text}
-
-Requirement:
-- If email: Professional and clear subject line.
-- If document: Structured with headings.
-- If research: Objective and well-sourced style.
+\"\"\"
 """
     structured_llm = llm.with_structured_output(DraftResponse)
     response = structured_llm.invoke([HumanMessage(content=prompt)])

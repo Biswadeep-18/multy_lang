@@ -8,6 +8,11 @@ init_app("Multi-Lang AI Assistant", "🌐")
 
 all_languages = get_flattened_languages()
 
+# Initialize App
+init_app("Multi-Lang AI Assistant", "🌐")
+
+all_languages = get_flattened_languages()
+
 # Sidebar
 with st.sidebar:
     st.title("⚙️ Configuration")
