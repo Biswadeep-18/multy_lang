@@ -8,10 +8,16 @@ def translation_node(state: AgentState):
     source = state.get("source_lang", "any language")
     input_text = state["messages"][-1].content
     
-    prompt = f"""You are a professional translator. 
+    prompt = f"""You are a highly skilled professional translator. 
 Translate the following text from {source} to {target}.
 If the source is 'Detect Language' or not specified, detect it automatically.
-Preserve the tone and context.
+
+Your task is to translate the provided text into {target} while strictly preserving the original tone, context, and nuances.
+
+Follow these rules:
+1. Translate to {target}. If {target} is 'English', translate from the source language to English.
+2. Maintain the formatting and emotional weight of the original text.
+3. You MUST provide your response using the 'TranslationResponse' tool.
 
 Required JSON format:
 {{
@@ -20,7 +26,9 @@ Required JSON format:
 }}
 
 Text to translate:
+\"\"\"
 {input_text}
+\"\"\"
 """
     # Use Structured Output with a safer method for Groq
     if hasattr(llm, "with_structured_output"):

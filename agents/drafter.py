@@ -9,11 +9,20 @@ def drafter_node(state: AgentState):
     
     target = state.get("target_lang", "English")
     
-    prompt = f"""You are a professional writer specializing in {task_type}s.
+    prompt = f"""You are a professional world-class writer specializing in {task_type}s.
 Draft a high-quality {task_type} in {target} based on the following instructions or notes:
 
-Input:
+Instructions:
+1. Ensure the content is research-backed, objective, or creative as per the {task_type} context.
+2. Email requirement: Provide a professional and clear subject line.
+3. Document requirement: Structured with clear headings and logical flow.
+4. Research requirement: Objective, well-sourced, and technical style.
+5. You MUST provide your response using the 'DraftResponse' tool.
+
+Input Notes/Instructions:
+\"\"\"
 {input_text}
+\"\"\"
 
 Requirements:
 - Language: {target}
