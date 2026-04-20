@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 SUPPORTED_LANGUAGES = {
     "Indian (Official)": [
         "Hindi", "English (Associate)", "Bengali", "Telugu", "Marathi", "Tamil", "Urdu", 
-        "Gujarati", "Kannada", "Malayalam", "Odia", "Punjabi", "Assamese", "Maithili", 
+        "Gujarati", "Kannada", "Malayalam", "Odia (Oriya)", "Punjabi", "Assamese", "Maithili", 
         "Sanskrit", "Kashmiri", "Nepali", "Sindhi", "Konkani", "Manipuri (Meitei)", 
         "Bodo", "Dogri"
     ],

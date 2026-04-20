@@ -17,15 +17,19 @@ def chatbot_node(state: AgentState):
     if any(keyword in last_msg.lower() for keyword in search_keywords):
         try:
             with DDGS() as ddgs:
-                # Increased results and using 'time' parameter if possible (not in standard ddgs text, but we can refine query)
+                # Optimized query for current affairs
                 query = f"{last_msg} {current_date}"
-                results = [r for r in ddgs.text(query, max_results=5)]
+                # Use region 'wt-wt' for global or 'in-en' for India if desired. 
+                # Keeping it flexible.
+                search_iter = ddgs.text(query, max_results=5)
+                results = [r for r in search_iter]
+                
                 if results:
-                    search_results = "\n".join([f"- {r['title']}: {r['body']}" for r in results])
+                    search_results = "\n".join([f"- {r.get('title', 'No Title')}: {r.get('body', 'No Content')}" for r in results])
                 else:
-                    search_results = "No results found for your query. Please note that real-time data might be limited."
+                    search_results = "No recent search results found. Please use information from your training data responsibly."
         except Exception as e:
-            search_results = f"Search failed: {str(e)}"
+            search_results = f"Real-time search temporarily unavailable. (Reason: {str(e)})"
 
     # 2. Enhanced System Prompt
     system_prompt = (

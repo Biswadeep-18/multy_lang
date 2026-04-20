@@ -8,25 +8,22 @@ load_dotenv()
 def get_llm(rating: str):
     """
     Returns the appropriate LLM based on a 4-tier intelligence system.
-    Ultra:  Gemini 3 Flash Preview
-    High:   Gemini 3.1 Flash Lite Preview
-    Medium: Llama 4 Scout 17B (Groq)
-    Low:    Llama 3.3 70B (Groq)
+    Ultra:  Gemini 2.0 Flash (best multilingual, vision, and reasoning)
+    High:   Gemini 1.5 Flash (fast, multilingual)
+    Medium: Llama 3.3 70B (Groq)
+    Low:    Llama 3.1 8B Instant (Groq - fast)
     """
     rating = rating.lower()
-    
+
     if rating == "ultra":
-        # Ultra: gemini-3-flash-preview
-        return ChatGoogleGenerativeAI(model="gemini-3-flash-preview", temperature=1.0)
-    
+        return ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
+
     elif rating == "high":
-        # High: gemini-3.1-flash-lite-preview
-        return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview", temperature=1.0)
-    
+        return ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.7)
+
     elif rating == "medium":
-        # Medium: Llama 3.1 70B
-        return ChatGroq(model="llama-3.1-70b-versatile", temperature=0.7)
-    
-    else:
-        # Low: Llama 3.3 70B
         return ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7)
+
+    else:
+        # Low: llama-3.1-8b-instant for speed
+        return ChatGroq(model="llama-3.1-8b-instant", temperature=0.7)
