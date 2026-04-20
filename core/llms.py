@@ -24,9 +24,9 @@ def get_llm(rating: str):
         return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview", temperature=1.0)
     
     elif rating == "medium":
-        # Medium: Llama 4 Scout (Assuming Groq/Langchain identifier)
-        return ChatGroq(model="meta-llama/llama-4-scout-17b-16e-instruct", temperature=0.7)
+        # Medium: Llama 3.1 70B
+        return ChatGroq(model="llama-3.1-70b-versatile", temperature=0.7)
     
     else:
-        # Low: llama-3.3-70b-versatile
+        # Low: Llama 3.3 70B
         return ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7)

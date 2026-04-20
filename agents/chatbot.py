@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from ddgs import DDGS
+from duckduckgo_search import DDGS
 from core.llms import get_llm
 from core.state import AgentState
 from langchain_core.messages import SystemMessage

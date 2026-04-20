@@ -17,8 +17,20 @@
 
 /* Move everything up */
 .block-container {
-    padding-top: 2rem !important;
+    padding-top: 0rem !important;
     padding-bottom: 0rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    max-width: 98% !important;
+}
+
+.main .block-container {
+    padding: 0 !important;
+}
+
+header {
+    visibility: hidden;
+    height: 0px;
 }
 
 /* Ensure ALL text is visible */

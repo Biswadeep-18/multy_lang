@@ -4,22 +4,21 @@ from core.graph import graph
 from core.config import init_app
 
 # Initialize App
-init_app("AI Chatbot", "💬")
+init_app("AI System", "")
 
-st.title("💬 AI Chatbot")
-st.markdown("---")
+st.title("AI Intelligence")
 
 # Get intelligence rating from session state or default
 if "intelligence_rating" not in st.session_state:
     st.session_state["intelligence_rating"] = "Medium"
 
 with st.sidebar:
-    st.title("⚙️ Settings")
+    st.title("Settings")
     st.session_state["intelligence_rating"] = st.selectbox(
         "Intelligence Rating",
         options=["Ultra", "High", "Medium", "Low"],
         index=["Ultra", "High", "Medium", "Low"].index(st.session_state["intelligence_rating"]),
-        help="Ultra: Gemini 3 | High: Gemini 3.1 Lite | Medium: Llama 4 Scout | Low: Llama 3.3 70B"
+        help="Production AI Models"
     )
 
 # Chat Logic

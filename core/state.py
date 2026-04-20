@@ -24,6 +24,7 @@ class AgentState(TypedDict):
     messages: Annotated[List[BaseMessage], add_messages]
     task: str # translate, grammar, draft, chat
     intelligence_rating: str # High, Medium, Low
+    source_lang: Optional[str] # English, French, detect, etc.
     target_lang: Optional[str] # English, Amharic, etc.
     task_subtype: Optional[str]
     output: str
