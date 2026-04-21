@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
+from langchain_core.messages import HumanMessage
 from core.config import init_app, get_flattened_languages, API_URL
+from core.graph import graph
 from core.vision import process_uploaded_file
 from core.export import generate_pdf, generate_txt
 
@@ -64,17 +66,40 @@ def run_assistant(input_text, task, target_lang=None, source_lang=None, task_sub
         "task_subtype": task_subtype
     }
     
+    # Try API Call first (Best for Structured Logs/Swagger)
     try:
         with st.spinner(f"AI System is processing {task}..."):
-            response = requests.post(API_URL, json=payload)
+            response = requests.post(API_URL, json=payload, timeout=45)
             response.raise_for_status()
-            return response.json()
-    except requests.exceptions.ConnectionError:
-        st.error("Backend Server Error: Connection Refused. Please ensure the FastAPI server is running.")
-        return None
+            res = response.json()
+            if res and isinstance(res, dict) and "output" in res:
+                return res
+    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+        # Fallback to Direct Graph Execution (Essential for Streamlit Cloud)
+        with st.status("Backend API Offline. Running Local AI Core Fallback...", expanded=False) as status:
+            try:
+                initial_state = {
+                    "messages": [HumanMessage(content=input_text)],
+                    "task": task,
+                    "intelligence_rating": intelligence_rating,
+                    "source_lang": source_lang,
+                    "target_lang": target_lang,
+                    "task_subtype": task_subtype
+                }
+                result = graph.invoke(initial_state)
+                status.update(label="AI Core Processing Complete!", state="complete", expanded=False)
+                return {
+                    "output": result["output"],
+                    "metadata": result.get("metadata", {}),
+                    "task": task
+                }
+            except Exception as direct_e:
+                st.error(f"Integrated Engine Error: {str(direct_e)}")
+                return None
     except Exception as e:
         st.error(f"Processing Error: {str(e)}")
         return None
+    return None
 
 # --- Main UI Logic ---
 
