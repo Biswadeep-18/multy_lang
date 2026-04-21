@@ -104,7 +104,7 @@ def run_assistant(input_text, task, target_lang=None, source_lang=None, task_sub
 # --- Main UI Logic ---
 
 if navigation == "Translate":
-    sub_mode = st.radio("Translation Sub-mode", ["Standard Translate", "Enterprise Draft"], horizontal=True, label_visibility="hidden", key="trans_sub_mode")
+    sub_mode = st.radio("Translation Sub-mode", ["Standard Translate", "Drafting"], horizontal=True, label_visibility="hidden", key="trans_sub_mode")
     
     st.divider()
     
@@ -191,7 +191,7 @@ if navigation == "Translate":
                         st.download_button("Download TXT", data=generate_txt(st.session_state["studio_draft_output"]), file_name="draft.txt", mime="text/plain", use_container_width=True)
                     with dd_col2:
                          try:
-                            pdf_bytes = generate_pdf(st.session_state["studio_draft_output"], title="Enterprise Draft")
+                            pdf_bytes = generate_pdf(st.session_state["studio_draft_output"], title="Drafting")
                             st.download_button("Download PDF", data=pdf_bytes, file_name="draft.pdf", mime="application/pdf", use_container_width=True)
                          except:
                             st.caption("PDF Export limited for regional scripts.")
