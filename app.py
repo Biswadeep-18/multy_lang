@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-from core.config import init_app, get_flattened_languages
+from core.config import init_app, get_flattened_languages, API_URL
 from core.vision import process_uploaded_file
 from core.export import generate_pdf, generate_txt
 
@@ -8,7 +8,7 @@ from core.export import generate_pdf, generate_txt
 init_app("Translate.AI", "🌐")
 
 all_languages = get_flattened_languages()
-API_URL = "http://127.0.0.1:8005/process"
+# API_URL is now imported from core.config
 
 # Sidebar Navigation
 with st.sidebar:

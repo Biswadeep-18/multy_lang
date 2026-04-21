@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from langchain_core.messages import HumanMessage
 from core.graph import graph
-from core.config import get_flattened_languages
+from core.config import get_flattened_languages, BACKEND_HOST, BACKEND_PORT
 
 # --- Swagger Metadata ---
 tags_metadata = [
@@ -160,4 +160,4 @@ def general_chat(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8005)
+    uvicorn.run(app, host="0.0.0.0", port=BACKEND_PORT)

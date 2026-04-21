@@ -37,6 +37,21 @@ def init_app(page_title: str, page_icon: str):
     
     st.set_page_config(
         page_title="Translate.AI",
-        page_icon="🌐", # Icon is okay for browser tab, but removing from UI as requested
+        page_icon="🌐",
         layout="wide"
     )
+
+# --- Configuration Helpers ---
+
+def get_env_bool(key: str, default: bool = False) -> bool:
+    val = os.getenv(key, str(default)).lower()
+    return val in ("true", "1", "yes")
+
+# Server Config
+BACKEND_HOST = os.getenv("BACKEND_HOST", "127.0.0.1")
+BACKEND_PORT = int(os.getenv("BACKEND_PORT", "8005"))
+API_URL = f"http://{BACKEND_HOST}:{BACKEND_PORT}/process"
+
+# API Keys
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
