@@ -44,6 +44,20 @@ if prompt := st.chat_input("How can I help you today?"):
                 "task": "chat",
                 "intelligence_rating": st.session_state["intelligence_rating"]
             }
+            
+            # Get the result from the graph
             res = graph.invoke(initial_state)
-            st.markdown(res["output"])
-            st.session_state["chat_history"].append({"role": "assistant", "content": res["output"]})
+            output_text = res.get("output", "")
+            
+            # --- Real-Time Streaming Effect ---
+            def stream_data():
+                import time
+                for word in output_text.split(" "):
+                    yield word + " "
+                    time.sleep(0.04) # Smooth typing effect
+
+            # Display with streaming effect
+            st.write_stream(stream_data())
+            
+            # Save to history
+            st.session_state["chat_history"].append({"role": "assistant", "content": output_text})
