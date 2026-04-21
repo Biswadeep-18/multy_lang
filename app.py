@@ -8,7 +8,7 @@ from core.export import generate_pdf, generate_txt
 init_app("Translate.AI", "🌐")
 
 all_languages = get_flattened_languages()
-API_URL = "http://localhost:8000/process"
+API_URL = "http://127.0.0.1:8005/process"
 
 # Sidebar Navigation
 with st.sidebar:
