@@ -17,27 +17,41 @@ def chatbot_node(state: AgentState):
     if any(keyword in last_msg.lower() for keyword in search_keywords):
         try:
             with DDGS() as ddgs:
-                # Optimized query for current affairs
-                query = f"{last_msg} {current_date}"
-                # Use region 'wt-wt' for global or 'in-en' for India if desired. 
-                # Keeping it flexible.
+                # Optimized query: Raw message + simple 'latest news' keyword
+                query = f"{last_msg} latest news"
                 search_iter = ddgs.text(query, max_results=5)
                 results = [r for r in search_iter]
                 
                 if results:
                     search_results = "\n".join([f"- {r.get('title', 'No Title')}: {r.get('body', 'No Content')}" for r in results])
                 else:
-                    search_results = "No recent search results found. Please use information from your training data responsibly."
+                    # Fallback retry without 'latest news'
+                    search_iter = ddgs.text(last_msg, max_results=3)
+                    results = [r for r in search_iter]
+                    if results:
+                        search_results = "\n".join([f"- {r.get('title', 'No Title')}: {r.get('body', 'No Content')}" for r in results])
+                    else:
+                        search_results = "No specific news found. Use internal knowledge for well-known figures."
         except Exception as e:
-            search_results = f"Real-time search temporarily unavailable. (Reason: {str(e)})"
+            search_results = "Search interface busy. Use internal knowledge."
 
     # 2. Enhanced System Prompt
     system_prompt = (
-        f"You are a helpful AI assistant with real-time search capabilities. Today's date is {current_date}.\n"
-        "IMPORTANT: Prioritize information found in the search results over your training data, as training data may be outdated (pre-2024).\n"
-        "If search results are available, use them to provide the most current answer.\n\n"
-        f"--- CURRENT SEARCH RESULTS ---\n{search_results}\n------------------------------\n\n"
-        "Be extremely accurate about current political figures and events. If you are unsure, state that the search results were inconclusive."
+        f"You are a highly intelligent AI assistant. Today's date is {current_date}.\n"
+        "Your goal is to provide precise, accurate, and insightful answers.\n\n"
+        "### REAL-TIME KNOWLEDGE\n"
+        f"{search_results}\n\n"
+        "### INSTRUCTIONS\n"
+        "1. Use the search results provided above as your primary source of truth for current events.\n"
+        "2. If search results are missing or inconclusive, use your sophisticated internal logic to provide the most likely correct answer, but maintain professional honesty.\n"
+        "3. ALWAYS provide a direct answer. Never say 'I am unable' unless it is absolutely impossible.\n"
+        "4. At the VERY END of your response, you MUST provide exactly 5 suggested follow-up questions that the user might want to ask next.\n"
+        "Format the suggestions exactly like this (one per line, prefixed with '>>'):\n"
+        ">> Clickable Suggestion 1\n"
+        ">> Clickable Suggestion 2\n"
+        ">> Clickable Suggestion 3\n"
+        ">> Clickable Suggestion 4\n"
+        ">> Clickable Suggestion 5"
     )
 
     # 3. Invoke LLM
